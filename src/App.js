@@ -1,25 +1,25 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import TrashControl from './pages/TrashControl'
 
 function App() {
+
+  const [container, setContainer] = useState([]);
+
+  const addContainer = (newContainer) => {
+    setContainer([...container, newContainer])
+  }
+
+  const deleteContainer = (containerId) => {
+    setContainer(container.filter(item => item.id !== containerId))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <TrashControl addContainer={addContainer}
+                    deleteContainer={deleteContainer}
+                    container={container}/>
   );
 }
+
 
 export default App;
