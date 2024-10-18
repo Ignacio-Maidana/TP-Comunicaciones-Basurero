@@ -9,7 +9,7 @@ const Saludo = () => {
 
         if (hora >= 6 && hora < 12) {
             return "Buenos días";
-        } else if (hora >= 12 && hora < 18) {
+        } else if (hora >= 12 && hora < 19) {
             return "Buenas tardes";
         } else {
             return "Buenas noches";
