@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/Greeting.css'
 
 const Saludo = () => {
     const [saludo, setSaludo] = useState("");
@@ -22,7 +23,7 @@ const Saludo = () => {
     }, []);
 
     return (
-        <h2>{saludo}</h2>
+        <h2 className='Greeting'>{saludo}</h2>
     );
 };
 

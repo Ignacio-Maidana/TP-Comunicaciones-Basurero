@@ -1,0 +1,50 @@
+.containerCard{
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    min-height: 150px;
+}
+
+.containerButtons{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.buttonDelete{
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #F24726;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.buttonEdit{
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0CA789;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.buttonDetails{
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2D9BF0;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.containerData {
+    display: flex;
+    flex-direction: column;
+}
+
+.containerData h2,h3,h4,h5{
+    margin: 10px 0;
+    font-size: 20px;
+}

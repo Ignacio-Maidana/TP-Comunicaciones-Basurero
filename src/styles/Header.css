@@ -1,0 +1,27 @@
+.containerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #E6E6E6;
+}
+
+.containerImage img {
+    max-width: 500px;
+    height: auto;
+}
+
+.containerTittles h1, 
+.containerTittles h3 {
+    margin: 5px;
+    padding-right: 50px;
+}
+.containerTittles h1 {
+    font-size: 50px;
+}
+.containerTittles h3 {
+    font-size: 25px;
+}
+.containerTittles {
+    text-align: left;
+}

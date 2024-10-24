@@ -43,7 +43,7 @@ function App() {
                                           deleteContainer={deleteContainer}
                                           updateContainer = {updateContainer}
                                           containers={containers}/>} />
-        <Route  path='/graph' 
+        <Route  path='/graphs' 
                 element = {<TrashGraphic containers = {containers}/>} />
 
         <Route  path='/container/:id'

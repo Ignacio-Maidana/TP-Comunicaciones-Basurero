@@ -1,5 +1,6 @@
+import '../styles/TrashControl.css'
 import Header from '../components/Header';
-import Saludo from '../components/Saludo';
+import Greeting from '../components/Greeting';
 import Container from '../components/Container';
 import Popup from '../components/PopUp';
 import Levels from '../components/Levels';
@@ -33,12 +34,14 @@ const TrashControl = ({addContainer, deleteContainer, updateContainer, container
     return (
         <>
             <Header />
-            <div className="contenedorMain">
-                <Saludo />
+            <div className="containerMain">
                 <div className="buttons">
-                    <Link to='/graficos'><button>Gráficos</button></Link>
+                    <Greeting />
+                    <Link to='/graphs'><button>Gráficos</button></Link>
                 </div>
-                <Levels />
+                <div className="levels">
+                    <Levels />
+                </div>
                 <div className="addContainer">
                     <h2>Basureros Activos</h2>
                     <button onClick={togglePopup}>Agregar basurero</button>

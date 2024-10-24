@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../styles/PopUp.css'
 
 
 const Popup = ({ show, handleClose, handleSubmit, selectedContainer }) => {
@@ -59,7 +60,7 @@ const Popup = ({ show, handleClose, handleSubmit, selectedContainer }) => {
                     <option value="UCES">2do Piso - UCES</option>
                 </select>
             </div>
-            <button type="submit">Agregar</button>
+            <button className='submit' type="submit">Agregar</button>
             </form>
         </div>
         </div>
