@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import TrashControl from './pages/TrashControl'
+import TrashGraphic from './pages/TrashGraphic';
+import TrashDetails from './pages/TrashDetails';
 
 function App() {
 
@@ -33,10 +36,20 @@ function App() {
   };
 
   return (
-      <TrashControl addContainer={addContainer}
-                    deleteContainer={deleteContainer}
-                    updateContainer = {updateContainer}
-                    containers={containers}/>
+    <BrowserRouter>
+      <Routes>
+        <Route  path='/' 
+                element = {<TrashControl  addContainer={addContainer} 
+                                          deleteContainer={deleteContainer}
+                                          updateContainer = {updateContainer}
+                                          containers={containers}/>} />
+        <Route  path='/graph' 
+                element = {<TrashGraphic containers = {containers}/>} />
+
+        <Route  path='/container/:id'
+                element= {<TrashDetails/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -4,11 +4,20 @@ import Container from '../components/Container';
 import Popup from '../components/PopUp';
 import Levels from '../components/Levels';
 import React, { useState } from 'react';
+import { Link, useNavigate} from 'react-router-dom';
 
 const TrashControl = ({addContainer, deleteContainer, updateContainer, containers}) => {
 
     const [showPopup, setShowPopup] = useState(false);
     const [selectedContainer, setSelectedContainer] = useState(null)
+
+    const navigate = useNavigate()
+
+    const handleDetailsClick = (container) => {
+        // Redirigir a la página de detalles con el ID del contenedor
+        navigate(`/container/${container.id}`, { state: { container } });
+    };
+
 
     const togglePopup = () => {
         setShowPopup(!showPopup)
@@ -27,8 +36,7 @@ const TrashControl = ({addContainer, deleteContainer, updateContainer, container
             <div className="contenedorMain">
                 <Saludo />
                 <div className="buttons">
-                    <button>Home</button>
-                    <button>Gráficos</button>
+                    <Link to='/graficos'><button>Gráficos</button></Link>
                 </div>
                 <Levels />
                 <div className="addContainer">
@@ -42,7 +50,8 @@ const TrashControl = ({addContainer, deleteContainer, updateContainer, container
 
                 <Container  selectContainer = {selectContainer}
                             deleteContainer = {deleteContainer}
-                            containers={containers} />
+                            containers={containers} 
+                            handleDetailsClick={handleDetailsClick}/>
             </div>
 
         </>

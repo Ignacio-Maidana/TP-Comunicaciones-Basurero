@@ -1,18 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Container = ({containers, deleteContainer, selectContainer}) => {
+const Container = ({containers, deleteContainer, selectContainer, handleDetailsClick}) => {
     return(
         <div className="containterCard">
             {
-                containers.map((containers, id) => (
-                        <div key={containers.id}>
-                            <span>Contenedor N° {containers.id}</span> 
-                            <span>Tipo: {containers.type}</span>
-                            <span>Ubicación: </span>{containers.location}
-                            <span>Nivel de basura: {containers.level}</span>
-                            <button onClick={()=>deleteContainer(containers.id)}>Eliminar Basurero</button>
+                containers.map((container, id) => (
+                        <div key={container.id}>
+                            <span>Contenedor N° {container.id}</span> 
+                            <span>Tipo: {container.type}</span>
+                            <span>Ubicación: </span>{container.location}
+                            <span>Nivel de basura: {container.level}</span>
+                            <button onClick={()=>deleteContainer(container.id)}>Eliminar Basurero</button>
                             <button onClick={()=>selectContainer(id)}>Modificar Basurero</button>
-                            <button>Ver Detalles</button>
+                            <button onClick={()=>handleDetailsClick(container)}>Ver Detalles</button>
                         </div>
                     ))
             }
