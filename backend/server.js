@@ -24,7 +24,7 @@ async function iniciarServidor() {
         await db.sync({ force: false }); 
         console.log('Modelos sincronizados con la base de datos.');
 
-        const PORT = process.env.PORT || 3000;
+        const PORT = process.env.PORT || 3001;
         app.listen(PORT, () => {
             console.log(`Servidor escuchando en el puerto ${PORT}`);
         });

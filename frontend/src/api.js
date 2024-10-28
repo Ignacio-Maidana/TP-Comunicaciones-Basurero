@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/bins';
+const API_URL = 'http://localhost:3001/api/bins';
 
 export const getAllBins = async () => {
   const response = await fetch(API_URL);
