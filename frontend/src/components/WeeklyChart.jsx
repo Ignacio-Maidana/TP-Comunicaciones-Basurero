@@ -1,32 +1,46 @@
-import React from "react";
+// WeeklyChart.jsx
+import React, { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2';
+import { getWeeklyData } from '../api';
 
-const WeeklyChart = ({data}) => {
+const WeeklyChart = ({ binId }) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    if (!data || !data.labels || !data.datasets) {
-        // Si los datos no están disponibles aún, puedes retornar un valor por defecto o un mensaje
-        return <div>No hay datos disponibles para mostrar el gráfico.</div>;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const weeklyData = await getWeeklyData(binId);
+                setData(weeklyData);
+                setLoading(false);
+            } catch (err) {
+                setError('Error al cargar los datos semanales');
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [binId]);
+
+    if (loading) {
+        return <div>Cargando datos semanales...</div>;
     }
 
-    const defaultData = {
-        labels: ['Sin datos'],
-        datasets: [
-        {
-            label: 'Nivel de basura',
-            data: [0],  // Valor por defecto
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-        },
-        ],
-    };
-    
-    const chartData = data || defaultData;  // Usa datos reales si están disponibles
-    
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    if (!data || !data.labels || !data.datasets) {
+        return <div>No hay datos disponibles para mostrar el gráfico semanal.</div>;
+    }
+
     return (
-        
-        <Bar data={chartData}/>
-    )
+        <div>
+            <h3>Datos Semanales</h3>
+            <Bar data={data} />
+        </div>
+    );
 }
 
-export default WeeklyChart
+export default WeeklyChart;

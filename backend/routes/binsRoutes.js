@@ -1,13 +1,13 @@
-// backend/routes/binsRoutes.js
-const express = require('express'); // Import express
-const router = express.Router(); // Create a router instance
-const binsController = require('../controllers/binsController'); // Import the bins controller
+const express = require('express');
+const router = express.Router();
+const binsController = require('../controllers/binsController');
 
-// Define routes for bin operations
-router.get('/', binsController.getAllBins); // GET all bins
-router.post('/', binsController.addBin); // POST a new bin
-router.put('/:id', binsController.updateBin); // PUT update a bin by ID
-router.delete('/:id', binsController.deleteBin); // DELETE a bin by ID
+router.get('/', binsController.getAllBins);
+router.post('/', binsController.addBin);
+router.put('/:id', binsController.updateBin);
+router.delete('/:id', binsController.deleteBin);
+router.get('/:id/weekly', binsController.getWeeklyData);
+router.get('/:id/monthly', binsController.getMonthlyData);
+router.post('/:id/history', binsController.addHistoryData);
 
-// Export the router to be used in other parts of the application
 module.exports = router;

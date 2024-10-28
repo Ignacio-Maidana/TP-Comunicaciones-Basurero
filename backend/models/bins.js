@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 // Define the Bin model
-const Bin = sequelize.define('Bin', {  // Changed from Basurero to Bin
+const Bin = sequelize.define('Bin', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -37,5 +37,11 @@ const Bin = sequelize.define('Bin', {  // Changed from Basurero to Bin
     tableName: 'basureros',  // Ensure this matches your actual table name
     timestamps: true,         // Optional: Add timestamps if needed (createdAt, updatedAt)
 });
+
+// Add this part at the end of the file
+const BinHistory = require('./BinHistory');
+
+Bin.hasMany(BinHistory, { foreignKey: 'binId' });
+BinHistory.belongsTo(Bin, { foreignKey: 'binId' });
 
 module.exports = Bin;

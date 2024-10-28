@@ -9,7 +9,7 @@ app.use(cors());  // Enables CORS for all origins (adjust according to your need
 app.use(express.json()); // Parses the body of requests as JSON
 
 // Routes
-app.use('/api/bins', binsRoutes); // Adjusted route prefix to match your controller's functionality
+app.use('/api/bins', binsRoutes); // This now includes routes for weekly and monthly data
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -20,7 +20,8 @@ app.use((err, req, res, next) => {
 // Sync models with the database and start the server
 async function iniciarServidor() {
     try {
-        await db.sync(); // Creates the tables if they do not exist
+        // Force: false means it won't drop tables if they already exist
+        await db.sync({ force: false }); 
         console.log('Modelos sincronizados con la base de datos.');
 
         const PORT = process.env.PORT || 3000;

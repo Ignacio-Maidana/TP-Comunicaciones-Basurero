@@ -1,29 +1,46 @@
-import React from "react";
+// MonthlyChart.jsx
+import React, { useState, useEffect } from "react";
 import { Bar } from 'react-chartjs-2';
+import { getMonthlyData } from '../api';
 
-const MonthlyChart = ({data}) => {
+const MonthlyChart = ({ binId }) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    if (!data || !data.labels || !data.datasets) {
-        // Si los datos no están disponibles aún, puedes retornar un valor por defecto o un mensaje
-        return <div>No hay datos disponibles para mostrar el gráfico.</div>;
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const monthlyData = await getMonthlyData(binId);
+                setData(monthlyData);
+                setLoading(false);
+            } catch (err) {
+                setError('Error al cargar los datos mensuales');
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [binId]);
+
+    if (loading) {
+        return <div>Cargando datos mensuales...</div>;
     }
 
-    const defaultData = {
-        labels: ['Sin datos'],
-        datasets: [
-        {
-            label: 'Nivel de basura',
-            data: [0],  // Valor por defecto
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-        },
-        ],
-    };
-    
-    const chartData = data || defaultData;  // Usa datos reales si están disponibles
-    
-    return <Bar data={chartData} />;
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    if (!data || !data.labels || !data.datasets) {
+        return <div>No hay datos disponibles para mostrar el gráfico mensual.</div>;
+    }
+
+    return (
+        <div>
+            <h3>Datos Mensuales</h3>
+            <Bar data={data} />
+        </div>
+    );
 }
 
-export default MonthlyChart
+export default MonthlyChart;

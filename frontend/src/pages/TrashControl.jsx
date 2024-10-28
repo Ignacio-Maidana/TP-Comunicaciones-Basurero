@@ -1,24 +1,21 @@
+import React, { useState } from 'react';
 import '../styles/TrashControl.css'
 import Header from '../components/Header';
 import Greeting from '../components/Greeting';
 import Container from '../components/Container';
 import Popup from '../components/PopUp';
 import Levels from '../components/Levels';
-import React, { useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 
 const TrashControl = ({addContainer, deleteContainer, updateContainer, containers}) => {
-
     const [showPopup, setShowPopup] = useState(false);
     const [selectedContainer, setSelectedContainer] = useState(null)
 
     const navigate = useNavigate()
 
     const handleDetailsClick = (container) => {
-        // Redirigir a la página de detalles con el ID del contenedor
         navigate(`/container/${container.id}`, { state: { container } });
     };
-
 
     const togglePopup = () => {
         setShowPopup(!showPopup)
@@ -28,9 +25,19 @@ const TrashControl = ({addContainer, deleteContainer, updateContainer, container
     }
 
     const selectContainer = (id) => {
-        setSelectedContainer({...containers[id], id})
+        setSelectedContainer(containers.find(container => container.id === id))
         setShowPopup(true)
     }
+
+    const handleSubmit = (type, location) => {
+        if (selectedContainer) {
+            updateContainer(type, location, selectedContainer.id);
+        } else {
+            addContainer(type, location);
+        }
+        togglePopup();
+    };
+
     return (
         <>
             <Header />
@@ -46,17 +53,19 @@ const TrashControl = ({addContainer, deleteContainer, updateContainer, container
                     <h2>Basureros Activos</h2>
                     <button onClick={togglePopup}>Agregar basurero</button>
                 </div>
-                <Popup  show={showPopup} 
-                        handleClose={togglePopup} 
-                        handleSubmit={selectedContainer ? updateContainer : addContainer}
-                        selectedContainer={selectedContainer}/>
-
-                <Container  selectContainer = {selectContainer}
-                            deleteContainer = {deleteContainer}
-                            containers={containers} 
-                            handleDetailsClick={handleDetailsClick}/>
+                <Popup  
+                    show={showPopup} 
+                    handleClose={togglePopup} 
+                    handleSubmit={handleSubmit}
+                    selectedContainer={selectedContainer}
+                />
+                <Container  
+                    selectContainer={selectContainer}
+                    deleteContainer={deleteContainer}
+                    containers={containers} 
+                    handleDetailsClick={handleDetailsClick}
+                />
             </div>
-
         </>
     );
 };
