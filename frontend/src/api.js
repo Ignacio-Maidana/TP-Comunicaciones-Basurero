@@ -22,28 +22,42 @@ export const addBin = async (binData) => {
   return response.json();
 };
 
-export const updateBin = async (id, binData) => {
+export const updateBin = async (id, data) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(binData),
+    body: JSON.stringify(data)
   });
+
   if (!response.ok) {
     throw new Error('Error updating bin');
   }
-  return response.json();
+
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return await response.json();
+  } else {
+    return {}; // Retorna un objeto vacío si la respuesta no tiene JSON
+  }
 };
 
 export const deleteBin = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
   });
+
   if (!response.ok) {
     throw new Error('Error deleting bin');
   }
-  return response.json();
+
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    return await response.json(); 
+  } else {
+    return {};
+  }
 };
 
 export const getWeeklyData = async (id) => {
