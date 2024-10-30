@@ -14,9 +14,24 @@ const Container = ({containers, deleteContainer, selectContainer, handleDetailsC
                             <h5>Estado: {container.estado || 'No especificado'}</h5>
                         </div>
                         <div className="containerButtons">
-                            <button className='buttonDelete' onClick={() => deleteContainer(container.id)}>Eliminar Basurero</button>
-                            <button className='buttonEdit' onClick={() => selectContainer(container.id)}>Modificar Basurero</button>
-                            <button className='buttonDetails' onClick={() => handleDetailsClick(container)}>Ver Detalles</button>
+                            <button 
+                                className='buttonDelete' 
+                                onClick={() => deleteContainer(container.id)}
+                            >
+                                Eliminar Basurero
+                            </button>
+                            <button 
+                                className='buttonEdit' 
+                                onClick={() => selectContainer(container)}
+                            >
+                                Modificar Basurero
+                            </button>
+                            <button 
+                                className='buttonDetails' 
+                                onClick={() => handleDetailsClick(container)}
+                            >
+                                Ver Detalles
+                            </button>
                         </div>
                     </div>
                 ))

@@ -9,31 +9,33 @@ import { Link, useNavigate} from 'react-router-dom';
 
 const TrashControl = ({addContainer, deleteContainer, updateContainer, containers}) => {
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedContainer, setSelectedContainer] = useState(null)
+    const [selectedContainer, setSelectedContainer] = useState(null);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleDetailsClick = (container) => {
         navigate(`/container/${container.id}`, { state: { container } });
     };
 
     const togglePopup = () => {
-        setShowPopup(!showPopup)
+        setShowPopup(!showPopup);
         if (!showPopup) {
-            setSelectedContainer(null)
+            setSelectedContainer(null);
         }
-    }
+    };
 
-    const selectContainer = (id) => {
-        setSelectedContainer(containers.find(container => container.id === id))
-        setShowPopup(true)
-    }
+    const selectContainer = (container) => {
+        setSelectedContainer(container);
+        setShowPopup(true);
+    };
 
-    const handleSubmit = (type, location) => {
+    const handleSubmit = (tipo, ubicacion) => {
         if (selectedContainer) {
-            updateContainer(type, location, selectedContainer.id);
+            // Para actualización, enviamos los datos en el formato correcto
+            updateContainer(tipo, ubicacion, selectedContainer.id);
         } else {
-            addContainer(type, location);
+            // Para nuevo contenedor
+            addContainer(tipo, ubicacion);
         }
         togglePopup();
     };

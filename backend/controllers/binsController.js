@@ -29,15 +29,20 @@ exports.updateBin = async (req, res) => {
     try {
         const { id } = req.params;
         const updatedData = req.body;
-        const [updatedCount, updatedBins] = await Bin.update(updatedData, {
-            where: { id: id },
-            returning: true, // To return the updated instance
+        
+        // Primero actualiza
+        await Bin.update(updatedData, {
+            where: { id: id }
         });
-        if (updatedCount === 0) {
-            res.status(404).json({ error: "Basurero no encontrado" });
-        } else {
-            res.status(200).json(updatedBins[0]); // Return the updated instance
+        
+        // Luego obtiene el registro actualizado
+        const updatedBin = await Bin.findByPk(id);
+        
+        if (!updatedBin) {
+            return res.status(404).json({ error: "Basurero no encontrado" });
         }
+        
+        res.status(200).json(updatedBin);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -21,7 +21,7 @@ const TrashDetails = () => {
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/api/bins/${id}`);
+                const response = await fetch(`http://localhost:3001/api/bins/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch container data');
                 }

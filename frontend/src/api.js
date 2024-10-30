@@ -23,24 +23,26 @@ export const addBin = async (binData) => {
 };
 
 export const updateBin = async (id, data) => {
+  //  nombres de las propiedades coincidan con el backend
+  const binData = {
+    tipo: data.tipo,
+    ubicacion: data.ubicacion,
+    estado: data.estado
+  };
+
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(binData)
   });
 
   if (!response.ok) {
     throw new Error('Error updating bin');
   }
 
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return await response.json();
-  } else {
-    return {}; // Retorna un objeto vacío si la respuesta no tiene JSON
-  }
+  return response.json();
 };
 
 export const deleteBin = async (id) => {
