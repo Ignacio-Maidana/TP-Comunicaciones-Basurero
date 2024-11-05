@@ -5,6 +5,7 @@ import Header from "../components/Header"
 import WeeklyChart from "../components/WeeklyChart"
 import MonthlyChart from "../components/MonthlyChart"
 import Details from "../components/Details"
+import { Link } from "react-router-dom";
 
 const TrashDetails = () => {
     const location = useLocation();
@@ -53,6 +54,7 @@ const TrashDetails = () => {
     return (
         <>
             <Header/>
+            <Link to='/'><button>🏠</button></Link>
             <h2>Contenedor N°{container.id}</h2>
             <h3>Tipo: {container.tipo}</h3>
             <WeeklyChart binId={id} />

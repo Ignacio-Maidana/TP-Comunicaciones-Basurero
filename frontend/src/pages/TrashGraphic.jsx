@@ -16,7 +16,7 @@ const TrashGraphic = ({ containers }) => {
     return (
         <>
             <Header/>
-            <Link to='/'><button>Home</button></Link>
+            <Link to='/'><button>🏠</button></Link><br/>
             <select onChange={handleSelectChange}>
                 <option value="">Selecciona un contenedor</option>
                 {containers.map((container) => (
