@@ -21,6 +21,10 @@ const Bin = sequelize.define('Bin', {
         type: DataTypes.FLOAT,
         allowNull: true,  // Optional field
     },
+    fecha: {
+        type: DataTypes.DATE,
+        allowNull: true,  // Optional field
+    },
     estado: {
         type: DataTypes.STRING,
         allowNull: true,  // Optional field
@@ -38,7 +42,6 @@ const Bin = sequelize.define('Bin', {
     timestamps: true,         // Optional: Add timestamps if needed (createdAt, updatedAt)
 });
 
-// Add this part at the end of the file
 const BinHistory = require('./BinHistory');
 
 Bin.hasMany(BinHistory, { foreignKey: 'binId' });

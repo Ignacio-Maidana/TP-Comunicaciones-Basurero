@@ -8,6 +8,6 @@ router.put('/:id', binsController.updateBin);
 router.delete('/:id', binsController.deleteBin);
 router.get('/:id/weekly', binsController.getWeeklyData);
 router.get('/:id/monthly', binsController.getMonthlyData);
-router.post('/:id/history', binsController.addHistoryData);
+router.post('/sensor-data', binsController.saveSensorData);
 
 module.exports = router;

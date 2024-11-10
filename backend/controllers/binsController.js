@@ -1,7 +1,7 @@
-// backend/controllers/binsController.js
 const Bin = require('../models/bins');
 const BinHistory = require('../models/BinHistory');
 const { Op } = require('sequelize');
+const SensorData = require('../models/SensorData');
 
 // Obtener todos los basureros
 exports.getAllBins = async (req, res) => {
@@ -131,19 +131,51 @@ exports.getMonthlyData = async (req, res) => {
         res.status(500).json({ message: 'Error obteniendo datos mensuales', error });
     }
 };
-// En binsController.js
 
-exports.addHistoryData = async (req, res) => {
-    try {
-        const { binId, kg_estimados, basura_recolectada, fecha } = req.body;
-        const historyData = await BinHistory.create({
-            binId,
-            kg_estimados,
-            basura_recolectada,
-            fecha: new Date(fecha)
-        });
-        res.status(201).json(historyData);
-    } catch (error) {
-        res.status(500).json({ message: 'Error al agregar datos históricos', error: error.message });
+// Guardar datos del sensor en la tabla bins y registrar en BinHistory
+exports.saveSensorData = async (req, res) => {
+  try {
+    const sensorData = req.body;
+    console.log('Datos del sensor recibidos:', sensorData);
+
+    if (!Array.isArray(sensorData)) {
+      throw new Error('Datos del sensor no válidos');
     }
+
+    const formattedSensorData = sensorData.map(data => ({
+      ...data,
+      distancia: parseFloat(data.distancia)
+    }));
+
+    await SensorData.bulkCreate(formattedSensorData);
+
+    const updatedBins = await Promise.all(formattedSensorData.map(async (data) => {
+      const { sensorId, distancia, fecha } = data;
+
+      const bin = await Bin.findOne({ where: { id: sensorId } });
+
+      if (bin) {
+        bin.distancia = distancia;
+        bin.fecha = fecha;
+
+        await bin.save();
+
+        await BinHistory.create({
+          binId: bin.id,
+          kg_estimados: bin.kg_estimados || 0, // Proporcionar un valor predeterminado si es nulo
+          basura_recolectada: bin.basura_recolectada || 0, // Proporcionar un valor predeterminado si es nulo
+          fecha: new Date(fecha)
+        });
+
+        return bin;
+      } else {
+        throw new Error(`Bin con id ${sensorId} no encontrado`);
+      }
+    }));
+
+    res.status(201).json(updatedBins);
+  } catch (error) {
+    console.error('Error guardando datos del sensor:', error);
+    res.status(500).json({ message: 'Error guardando datos del sensor', error: error.message });
+  }
 };

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import TrashControl from './pages/TrashControl'
+import TrashControl from './pages/TrashControl';
 import TrashGraphic from './pages/TrashGraphic';
 import TrashDetails from './pages/TrashDetails';
-import { getAllBins, addBin, updateBin, deleteBin } from './api';
+import { getAllBins, addBin, updateBin, deleteBin, saveSensorData } from './api';
 
 function App() {
   const [containers, setContainers] = useState([]);
 
   useEffect(() => {
     fetchContainers();
+    saveSensorData();
   }, []);
 
   const fetchContainers = async () => {
@@ -43,7 +44,7 @@ function App() {
   const updateContainer = async (type, location, id) => {
     try {
       const updatedContainer = await updateBin(id, { tipo: type, ubicacion: location });
-      setContainers(containers.map(container => 
+      setContainers(containers.map(container =>
         container.id === id ? updatedContainer : container
       ));
     } catch (error) {
