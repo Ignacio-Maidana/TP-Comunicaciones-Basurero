@@ -1,14 +1,14 @@
 import React from "react";
 
-const Details = ({container}) => {
+const Details = ({ container }) => {
     return (
         <>
             <h2>Detalles</h2>
-            <p>Ubicacion: {container.location}</p>
-            <p>Porcentaje exacto: {container.percent}</p>
-            <p>Peso: {container.weight}</p>
+            <p>Ubicación: {container.ubicacion}</p>
+            <p>Porcentaje exacto: {container.porcentaje}</p>
+            <p>Peso: {container.peso}</p>
         </>
-    )
-}
+    );
+};
 
 export default Details

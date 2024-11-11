@@ -1,8 +1,6 @@
-// backend/models/Bin.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-// Define the Bin model
 const Bin = sequelize.define('Bin', {
     id: {
         type: DataTypes.INTEGER,
@@ -30,8 +28,8 @@ const Bin = sequelize.define('Bin', {
         allowNull: true,  
     }
 }, {
-    tableName: 'basureros',  // Ensure this matches your actual table name
-    timestamps: false,         // Optional: Add timestamps if needed (createdAt, updatedAt)
+    tableName: 'basureros',
+    timestamps: false,
 });
 
 module.exports = Bin;

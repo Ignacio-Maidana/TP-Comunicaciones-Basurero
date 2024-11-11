@@ -22,11 +22,11 @@ const Notification = sequelize.define('Notification', {
     type: DataTypes.DATE, 
     allowNull: false,
     defaultValue: DataTypes.NOW 
-    }
+  }
 });
 
-Notificacion.associate = function(models) {
-  Notificacion.belongsTo(models.Basurero, { foreignKey: 'idBasurero' });
+Notification.associate = function(models) {
+    Notification.belongsTo(models.Basurero, { foreignKey: 'idBasurero' });
 };
 
 module.exports = Notification;                          

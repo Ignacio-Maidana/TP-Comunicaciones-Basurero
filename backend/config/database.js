@@ -1,10 +1,9 @@
-// backend/config/database.js
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: './database.sqlite', // Nombre del archivo de la base de datos
-  logging: false // Desactiva el logging de las consultas SQL (opcional)
+  storage: './database.sqlite', // Ensure this path is correct
+  logging: false // Optional: Disable logging
 });
 
 module.exports = sequelize;
