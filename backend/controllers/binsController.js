@@ -1,8 +1,11 @@
 const { Bin } = require('../models/bin');
+const fetch = require('node-fetch');
+
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 exports.binCreate = async (req, res) => {
     try {
+        console.log("Iniciando llamada a la API externa...");
         const response = await fetch('https://script.google.com/macros/s/AKfycbxoi58HkA9aeHgq8kxG8LcugHObYxH7MD0B7n0C2w256tIRu9ZpSsRcav2u8Jr8yVwB4g/exec');
         if (!response.ok) {
             throw new Error(`Failed to fetch data from external API: ${response.statusText}`);

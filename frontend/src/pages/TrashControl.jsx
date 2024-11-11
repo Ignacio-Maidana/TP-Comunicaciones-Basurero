@@ -20,7 +20,7 @@ const TrashControl = ({ addContainer, deleteContainer, updateContainer, containe
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/bins');
+        const response = await fetch('http://localhost:3001/api/bins/datos-sheet');
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }

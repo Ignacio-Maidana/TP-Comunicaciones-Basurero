@@ -7,21 +7,25 @@ const Bin = sequelize.define('Bin', {
         primaryKey: true,
         autoIncrement: true,
     },
+    sensorId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     fecha: {
         type: DataTypes.DATE,
-        allowNull: true,
-    },
-    tipo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    ubicacion: {
-        type: DataTypes.STRING,
         allowNull: false,
     },
     distancia: {
         type: DataTypes.FLOAT,
-        allowNull: true,  
+        allowNull: false,  
+    },
+    tipo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    ubicacion: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     estado: {
         type: DataTypes.STRING,
