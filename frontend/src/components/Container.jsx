@@ -10,6 +10,7 @@ const Container = ({ containers = [], deleteContainer, selectContainer, handleDe
             <h2>Contenedor N° {container.id}</h2> 
             <h3>Tipo: {container.tipo}</h3>
             <h4>Ubicación: {container.ubicacion}</h4>
+            <h4>Sensor ID: {container.sensorId}</h4>
             <h5>Estado: {container.estado || 'No especificado'}</h5>
           </div>
           <div className="containerButtons">

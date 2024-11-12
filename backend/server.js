@@ -1,35 +1,26 @@
+// server.js
 const express = require('express');
 const app = express();
-const db = require('./config/database');
 const binsRoutes = require('./routes/binsRoutes');
 const cors = require('cors');
+const { sequelize } = require('./models');
+const PORT = 3001;
+const { sincronizarDatosConSheet } = require('./controllers/binsController');
 
-// Middlewares
-app.use(cors());  // Enables CORS for all origins (adjust according to your needs)
-app.use(express.json()); // Parses the body of requests as JSON
+app.use(cors());
+app.use(express.json());
 
-// Routes
-app.use('/api/bins', binsRoutes); // Use the binsRoutes for /api/bins
+app.use('/api/bins', binsRoutes);
 
-// Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack for debugging
+    console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!', error: err.message });
 });
 
-// Sync models with the database and start the server
-async function iniciarServidor() {
-    try {
-        await db.sync({ force: false }); 
-        console.log('Modelos sincronizados con la base de datos.');
+setInterval(sincronizarDatosConSheet, 10000);
 
-        const PORT = process.env.PORT || 3001;
-        app.listen(PORT, () => {
-            console.log(`Servidor escuchando en el puerto ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Error al sincronizar la base de datos:', error);
-    }
-}
-
-iniciarServidor();
+sequelize.sync().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+}).catch(err => console.log('Error al sincronizar Sequelize:', err));

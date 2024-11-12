@@ -1,51 +1,98 @@
-const { Bin } = require('../models/bin');
-const fetch = require('node-fetch');
+// controllers/binsController.js
+const { Bin } = require('../models');
+const axios = require('axios');
+const Sequelize = require('sequelize');
 
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
+
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQneu5Gq-KmX3MrdGiuecPZgowfpvTE-wX73yHVEGFiTQx-KoQSWdo13DCMsoCvMS3zrzpsphZeiSXT/pub?gid=0&single=true&output=csv';
+
+// Función para calcular el porcentaje de llenado
+const calcularPorcentajeLlenado = (distancia, alturaMaxima = 30) => {
+  const porcentaje = ((alturaMaxima - distancia) / alturaMaxima) * 100;
+  return Math.min(Math.max(porcentaje, 0), 100);
+};
+
+// Función para sincronizar datos con Google Sheets y limpiar registros obsoletos
+// Función para sincronizar datos con Google Sheets
+const sincronizarDatosConSheet = async () => {
+  try {
+    const response = await axios.get(`${GOOGLE_SHEET_CSV_URL}&cachebuster=${Date.now()}`);
+    const rows = response.data.split('\n').slice(1); // Omite la cabecera
+
+    const nuevosSensorIds = [];
+    const sheetDataPromises = rows.map(async (row) => {
+      const [fecha, sensorId, distanciaPromedio] = row.split(',');
+
+      // Validar cada valor y omitir filas incompletas o inválidas
+      if (!fecha || !sensorId || !distanciaPromedio || isNaN(sensorId) || isNaN(distanciaPromedio)) {
+        console.warn(`Fila inválida ignorada: ${row}`);
+        return null;
+      }
+
+      const parsedFecha = new Date(Date.parse(fecha));
+      if (isNaN(parsedFecha)) {
+        console.warn(`Fecha inválida: ${fecha}`);
+        return null;
+      }
+
+      const parsedSensorId = parseInt(sensorId);
+      nuevosSensorIds.push(parsedSensorId);
+      const porcentajeLlenado = calcularPorcentajeLlenado(parseFloat(distanciaPromedio));
+
+      // Buscar el registro existente
+      const existingBin = await Bin.findOne({ where: { sensorId: parsedSensorId } });
+      if (existingBin) {
+        // Actualizar registro existente
+        return existingBin.update({
+          fecha: parsedFecha,
+          distanciaPromedio: parseFloat(distanciaPromedio),
+          porcentajeLlenado,
+        });
+      } else {
+        // Crear nuevo registro si no existe
+        return Bin.create({
+          fecha: parsedFecha,
+          sensorId: parsedSensorId,
+          distanciaPromedio: parseFloat(distanciaPromedio),
+          porcentajeLlenado,
+        });
+      }
+    });
+
+    await Promise.all(sheetDataPromises.filter(p => p !== null));
+
+    // Eliminar registros obsoletos
+    await Bin.destroy({
+      where: {
+        sensorId: {
+          [Sequelize.Op.notIn]: nuevosSensorIds,
+        },
+      },
+    });
+
+    console.log('Datos sincronizados correctamente y registros obsoletos eliminados.');
+  } catch (error) {
+    console.error('Error al sincronizar los datos:', error);
+  }
+};
+
+
+
 
 exports.binCreate = async (req, res) => {
-    try {
-        console.log("Iniciando llamada a la API externa...");
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxoi58HkA9aeHgq8kxG8LcugHObYxH7MD0B7n0C2w256tIRu9ZpSsRcav2u8Jr8yVwB4g/exec');
-        if (!response.ok) {
-            throw new Error(`Failed to fetch data from external API: ${response.statusText}`);
-        }
-        const data = await response.json();
-    
-        console.log("Datos recibidos de la API de Google:", data);
-    
-        for (let bin of data) {
-            const fecha = new Date(bin.fecha);
-            const distanciaPromedio = parseFloat(bin.distancia);
-    
-            const existingRecord = await Bin.findOne({
-                where: { fecha: fecha }
-            });
-    
-            if (existingRecord) {
-                await existingRecord.update({ distancia: distanciaPromedio });
-            } else {
-                await Bin.create({
-                    distancia: distanciaPromedio,
-                    fecha: fecha
-                });
-            }
-        }
-
-        const allRecords = await Bin.findAll();
-        res.status(200).json(allRecords); 
-    } catch (error) {
-        console.error('Error al obtener datos:', error);
-        res.status(500).json({ error: 'Error al obtener datos o guardar en la base de datos' });
-    }
+  await sincronizarDatosConSheet();
+  res.json({ message: 'Datos sincronizados correctamente.' });
 };
 
-exports.getBins = async (req, res) => {
-    try {
-        const bins = await Bin.findAll();
-        res.status(200).json(bins);
-    } catch (error) {
-        console.error('Error fetching bins:', error);
-        res.status(500).json({ error: 'Error fetching bins' });
-    }
+exports.binFindData = async (req, res) => {
+  try {
+    const data = await Bin.findAll();
+    res.json(data);
+  } catch (error) {
+    console.error('Error al obtener los datos:', error);
+    res.status(500).json({ error: 'Error al obtener los datos' });
+  }
 };
+
+exports.sincronizarDatosConSheet = sincronizarDatosConSheet;
