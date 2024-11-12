@@ -1,67 +1,45 @@
-import React, { useEffect, useState } from "react"
-import { useLocation, useParams } from 'react-router-dom';
-import { ClipLoader } from 'react-spinners';
-import Header from "../components/Header"
-import WeeklyChart from "../components/WeeklyChart"
-import MonthlyChart from "../components/MonthlyChart"
-import Details from "../components/Details"
-import { Link } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import LightweightChart from '../components/LightweightChart';
 
 const TrashDetails = () => {
-    const location = useLocation();
     const { id } = useParams();
-    const [container, setContainer] = useState(location.state?.container);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [chartData, setChartData] = useState([]);
+
+    const fetchRegistros = useCallback(async () => {
+        const response = await fetch(`http://localhost:4000/api/placa/${id}/registros`);
+        const data = await response.json();
+
+        // Filtra registros válidos y obtén solo los últimos 20
+        const registros = data
+            .filter((r) => r.porcentaje !== null && r.fecha) // Asegúrate de que los datos son válidos
+            .slice(-20) // Obtiene los últimos 20 registros reales
+            .reverse(); // Invierte para mostrar del más reciente al más antiguo
+
+        const chartData = registros.map((r) => {
+            const fecha = new Date(r.fecha);
+            fecha.setHours(fecha.getHours() + 3); // Ajustar la hora sumando 3 horas
+            return {
+                time: fecha.getTime() / 1000, // Convertir a segundos
+                value: r.porcentaje,
+            };
+        });
+
+        setChartData(chartData);
+    }, [id]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (container) {
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await fetch(`http://localhost:3001/api/bins/${id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch container data');
-                }
-                const data = await response.json();
-                setContainer(data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching container data:', error);
-                setError('Error al cargar los datos del contenedor');
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [id, container]);
-    
-    if (loading) {
-        return <ClipLoader color="#00BFFF" size={50} />;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
-    if (!container) {
-        return <div>No se encontraron datos para este contenedor.</div>;
-    }
+        fetchRegistros();
+    }, [fetchRegistros]);
 
     return (
-        <>
-            <Header/>
-            <Link to='/'><button>🏠</button></Link>
-            <h2>Contenedor N°{container.id}</h2>
-            <h3>Tipo: {container.tipo}</h3>
-            <WeeklyChart binId={id} />
-            <MonthlyChart binId={id} />
-            <Details container={container}/>
-        </>
-    )
-}
+        <div>
+            <h1>Detalles de Basureros</h1>
+            <h2>Gráfico Diario</h2>
+            <button onClick={fetchRegistros}>Actualizar gráfico</button>
+            {chartData.length > 0 ? <LightweightChart data={chartData} /> : <p>Gráfico en blanco</p>}
+        </div>
+    );
+};
 
 export default TrashDetails;

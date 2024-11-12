@@ -1,36 +1,30 @@
 const express = require('express');
-const app = express();
-const db = require('./config/database');
-const binsRoutes = require('./routes/binsRoutes');
+const bodyParser = require('body-parser');
 const cors = require('cors');
+const cron = require('node-cron');
+const { sequelize } = require('./models');
+const { router: registroRoutes, fetchAndSaveData } = require('./routes/registro');
+const placaRoutes = require('./routes/placa');
 
-// Middlewares
-app.use(cors());  // Enables CORS for all origins (adjust according to your needs)
-app.use(express.json()); // Parses the body of requests as JSON
+const app = express();
 
-// Routes
-app.use('/api/bins', binsRoutes); // This now includes routes for weekly and monthly data
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'DELETE'],
+}));
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack for debugging
-    res.status(500).json({ message: 'Something went wrong!', error: err.message });
-});
+app.use(bodyParser.json());
 
-// Sync models with the database and start the server
-async function iniciarServidor() {
-    try {
-        // Force: false means it won't drop tables if they already exist
-        await db.sync({ force: false }); 
-        console.log('Modelos sincronizados con la base de datos.');
+app.use('/api/basurero', registroRoutes);
+app.use('/api/placa', placaRoutes);
 
-        const PORT = process.env.PORT || 3001;
-        app.listen(PORT, () => {
-            console.log(`Servidor escuchando en el puerto ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Error al sincronizar la base de datos:', error);
-    }
-}
+// Configurar el cron job para que se ejecute cada 10 segundos
+cron.schedule('*/10 * * * * *', fetchAndSaveData);
 
-iniciarServidor();
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log('Base de datos sincronizada con estructura actualizada');
+        const PORT = process.env.PORT || 4000;
+        app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
+    })
+    .catch(error => console.error('Error al sincronizar la base de datos:', error));

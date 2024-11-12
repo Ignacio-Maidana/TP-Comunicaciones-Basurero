@@ -4,31 +4,32 @@ import '../styles/PopUp.css'
 const Popup = ({ show, handleClose, handleSubmit, selectedContainer }) => {
     const [containerType, setContainerType] = useState('');
     const [containerLocation, setContainerLocation] = useState('');
+    const [containerSensorId, setContainerSensorId] = useState('');
 
     useEffect(() => {
         if (selectedContainer) {
-            // Usar los nombres de propiedades correctos del backend
             setContainerType(selectedContainer.tipo || '');
             setContainerLocation(selectedContainer.ubicacion || '');
+            setContainerSensorId(selectedContainer.sensorId || '');
         } else {
             setContainerType('');
             setContainerLocation('');
+            setContainerSensorId('');
         }
     }, [selectedContainer]);
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (!containerType || !containerLocation) {
-            alert('Por favor selecciona tanto el tipo como la ubicación del contenedor.');
+        if (!containerType || !containerLocation || !containerSensorId) {
+            alert('Por favor completa todos los campos.');
             return;
         }
 
-        // Enviar los datos con los nombres de propiedades correctos
-        handleSubmit(containerType, containerLocation);
+        handleSubmit(containerType, containerLocation, containerSensorId);
         
-        // Limpiar el formulario
         setContainerType('');
         setContainerLocation('');
+        setContainerSensorId('');
         handleClose();
     };
 
@@ -44,8 +45,7 @@ const Popup = ({ show, handleClose, handleSubmit, selectedContainer }) => {
                             <select 
                                 name="containerType" 
                                 value={containerType} 
-                                onChange={(e) => setContainerType(e.target.value)}
-                            >
+                                onChange={(e) => setContainerType(e.target.value)}>
                                 <option value="">Seleccione una opción...</option>
                                 <option value="Plasticos y Latas">Plasticos y Latas</option>
                                 <option value="Papeles y Cartones">Papeles y Cartones</option>
@@ -68,6 +68,15 @@ const Popup = ({ show, handleClose, handleSubmit, selectedContainer }) => {
                                 <option value="Baños">2do Piso - Baños</option>
                                 <option value="UCES">2do Piso - UCES</option>
                             </select>
+                        </div>
+                        <div>
+                            <label>Sensor ID:</label>
+                            <input 
+                                type="text" 
+                                value={containerSensorId} 
+                                onChange={(e) => setContainerSensorId(e.target.value)}
+                                placeholder="ID del Sensor"
+                            />
                         </div>
                         <button className='submit' type="submit">
                             {selectedContainer ? 'Guardar Cambios' : 'Agregar'}

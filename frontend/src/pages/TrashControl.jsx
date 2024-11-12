@@ -1,75 +1,34 @@
-import React, { useState } from 'react';
-import '../styles/TrashControl.css'
+import React, { useEffect, useState, useCallback } from 'react';
 import Header from '../components/Header';
 import Greeting from '../components/Greeting';
-import Container from '../components/Container';
-import Popup from '../components/PopUp';
 import Levels from '../components/Levels';
-import { Link, useNavigate} from 'react-router-dom';
+import Container from '../components/Container';
 
-const TrashControl = ({addContainer, deleteContainer, updateContainer, containers}) => {
-    const [showPopup, setShowPopup] = useState(false);
-    const [selectedContainer, setSelectedContainer] = useState(null);
+const TrashControl = () => {
+  const [placas, setPlacas] = useState([]);
 
-    const navigate = useNavigate();
+  const fetchPlacas = useCallback(async () => {
+    const response = await fetch('http://localhost:4000/api/placa');
+    const data = await response.json();
+    setPlacas(data);
+  }, []);
 
-    const handleDetailsClick = (container) => {
-        navigate(`/container/${container.id}`, { state: { container } });
-    };
+  useEffect(() => {
+    fetchPlacas();
+    const interval = setInterval(fetchPlacas, 10000); // Actualizar cada 10 segundos
+    return () => clearInterval(interval); // Limpiar el intervalo al desmontar el componente
+  }, [fetchPlacas]);
 
-    const togglePopup = () => {
-        setShowPopup(!showPopup);
-        if (!showPopup) {
-            setSelectedContainer(null);
-        }
-    };
-
-    const selectContainer = (container) => {
-        setSelectedContainer(container);
-        setShowPopup(true);
-    };
-
-    const handleSubmit = (tipo, ubicacion) => {
-        if (selectedContainer) {
-            // Para actualización, enviamos los datos en el formato correcto
-            updateContainer(tipo, ubicacion, selectedContainer.id);
-        } else {
-            // Para nuevo contenedor
-            addContainer(tipo, ubicacion);
-        }
-        togglePopup();
-    };
-
-    return (
-        <>
-            <Header />
-            <div className="containerMain">
-                <div className="buttons">
-                    <Greeting />
-                    <Link to='/graphs'><button>Gráficos</button></Link>
-                </div>
-                <div className="levels">
-                    <Levels />
-                </div>
-                <div className="addContainer">
-                    <h2>Basureros Activos</h2>
-                    <button onClick={togglePopup}>Agregar basurero</button>
-                </div>
-                <Popup  
-                    show={showPopup} 
-                    handleClose={togglePopup} 
-                    handleSubmit={handleSubmit}
-                    selectedContainer={selectedContainer}
-                />
-                <Container  
-                    selectContainer={selectContainer}
-                    deleteContainer={deleteContainer}
-                    containers={containers} 
-                    handleDetailsClick={handleDetailsClick}
-                />
-            </div>
-        </>
-    );
+  return (
+    <div>
+      <Header />
+      <Greeting />
+      <Levels />
+      {placas.map((placa) => (
+        <Container key={placa.id} placa={placa} />
+      ))}
+    </div>
+  );
 };
 
 export default TrashControl;
