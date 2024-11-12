@@ -1,26 +1,30 @@
-// server.js
 const express = require('express');
-const app = express();
-const binsRoutes = require('./routes/binsRoutes');
+const bodyParser = require('body-parser');
 const cors = require('cors');
+const cron = require('node-cron');
 const { sequelize } = require('./models');
-const PORT = 3001;
-const { sincronizarDatosConSheet } = require('./controllers/binsController');
+const { router: registroRoutes, fetchAndSaveData } = require('./routes/registro');
+const placaRoutes = require('./routes/placa');
 
-app.use(cors());
-app.use(express.json());
+const app = express();
 
-app.use('/api/bins', binsRoutes);
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'DELETE'],
+}));
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Something went wrong!', error: err.message });
-});
+app.use(bodyParser.json());
 
-setInterval(sincronizarDatosConSheet, 10000);
+app.use('/api/basurero', registroRoutes);
+app.use('/api/placa', placaRoutes);
 
-sequelize.sync().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    });
-}).catch(err => console.log('Error al sincronizar Sequelize:', err));
+// Configurar el cron job para que se ejecute cada 10 segundos
+cron.schedule('*/10 * * * * *', fetchAndSaveData);
+
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log('Base de datos sincronizada con estructura actualizada');
+        const PORT = process.env.PORT || 4000;
+        app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
+    })
+    .catch(error => console.error('Error al sincronizar la base de datos:', error));

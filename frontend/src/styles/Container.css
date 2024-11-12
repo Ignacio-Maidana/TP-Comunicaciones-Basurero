@@ -48,3 +48,41 @@
     margin: 10px 0;
     font-size: 20px;
 }
+
+.containerCard {
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    min-height: 150px;
+  }
+  
+  .containerButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .buttonDetails,
+  .buttonReset,
+  .buttonLastReading {
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .buttonDetails {
+    background-color: #2d9bf0;
+    color: white;
+  }
+  
+  .buttonReset {
+    background-color: #f24726;
+    color: white;
+  }
+  
+  .buttonLastReading {
+    background-color: #0ca789;
+    color: white;
+  }
