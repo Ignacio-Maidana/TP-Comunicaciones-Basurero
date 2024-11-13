@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.detailsContainer {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%; /* O ajustar el ancho según el diseño general */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Work Sans', sans-serif;
+}
+.detailsContainer h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.detailsContainer h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.detailsContainer button {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.detailsContainer button:hover {
+    background-color: #0056b3;
+}
+
+.chartPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 1000px; /* Tamaño del contenedor del gráfico */
+    border: 1px dashed #ddd;
+    color: #888;
+    font-size: 16px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.chartContainer {
+    width: 100%; /* Ancho del contenedor de gráficos */
+    max-width: 1000px; /* Máximo ancho que puede alcanzar el gráfico */
+    margin: 0 auto; /* Centra el gráfico horizontalmente */
+    padding: 20px; /* Añadir padding para un mejor aspecto */
+    box-sizing: border-box; /* Incluir padding y borde en el tamaño total */
+}

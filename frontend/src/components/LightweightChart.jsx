@@ -18,7 +18,7 @@ const LightweightChart = ({ data }) => {
         };
     }, [data]);
 
-    return <div ref={chartContainerRef} style={{ width: '100%', height: '300px' }} />;
+    return <div ref={chartContainerRef} style={{ width: '1000px', height: '400px' }} />;
 };
 
 export default LightweightChart;

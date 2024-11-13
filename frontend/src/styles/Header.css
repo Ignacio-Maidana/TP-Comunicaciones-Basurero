@@ -24,4 +24,12 @@
 }
 .containerTittles {
     text-align: left;
+    display: flex;
+    gap: 10px; /* Espacio entre la imagen y los títulos */
 }
+
+.containerLogo img {
+    width: 100px; /* Ajusta el tamaño de la imagen */
+    height: auto;
+}
+

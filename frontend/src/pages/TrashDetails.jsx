@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import LightweightChart from '../components/LightweightChart';
+import Header from '../components/Header';
+import '../styles/TrashDetails.css';
 
 const TrashDetails = () => {
     const { id } = useParams();
@@ -33,12 +35,21 @@ const TrashDetails = () => {
     }, [fetchRegistros]);
 
     return (
-        <div>
-            <h1>Detalles de Basureros</h1>
-            <h2>Gráfico Diario</h2>
-            <button onClick={fetchRegistros}>Actualizar gráfico</button>
-            {chartData.length > 0 ? <LightweightChart data={chartData} /> : <p>Gráfico en blanco</p>}
-        </div>
+        <>
+            <Header />
+            <div className="detailsContainer">
+                <h2>Detalles de Basureros</h2>
+                <h3>Gráfico Diario</h3>
+                <button onClick={fetchRegistros}>Actualizar gráfico</button>
+                {chartData.length > 0 ? (
+                    <div className="chartContainer">
+                        <LightweightChart data={chartData} />
+                    </div>
+                ) : (
+                    <p className="chartPlaceholder">Gráfico en blanco</p>
+                )}
+            </div>
+        </>
     );
 };
 

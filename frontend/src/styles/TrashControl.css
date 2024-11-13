@@ -1,62 +1,27 @@
-.containerMain{
-    margin: 20px 50px;
-}
-
-.buttons{
+.mainContainer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* Alinea `Levels` y `Container` uno al lado del otro */
+    align-items: flex-start; /* Asegura que ambos componentes estén alineados en la parte superior */
+    gap: 20px;
+    padding: 20px 40px;
 }
 
-.buttons button{
-    background-color: #2D9BF0;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-right: 50px;
-    color: white;
-}
-.buttons button:hover{
-    background-color: #2b81c3;
-    transition: 0.5s;
+.containerList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-content: flex-start; /* Mantiene los contenedores arriba */
+    flex: 3; /* Ocupa más espacio que Levels */
 }
 
-.levels{
-    display: block;
-    float: right;
-    margin-right: 50px;
-    text-align: center;
-    border: 1px rgb(152, 152, 152) solid;
-    padding: 20px;
-}
-
-.levels h2{
-    margin: 0;
-    font-size: 35px;
-}
-
-.levels li{
-    list-style: none;
-    padding: 5px;
-    font-size: 20px;
-}
-
-.levels ul {
-    padding: 0;
-}
-
-.addContainer h2{
-    font-size: 30px;
-}
-
-.addContainer button{
-    font-size: 15px;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 15px;
-    background-color: #8FD14F;
-    color: white;
-    cursor: pointer;
+/* Asegurarse que Levels se quede fijo a la derecha */
+.levels {
+    flex: 1; /* Ocupa menos espacio que Container */
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

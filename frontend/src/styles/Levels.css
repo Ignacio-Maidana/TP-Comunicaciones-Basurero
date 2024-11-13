@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+.containerLevelsWrapper {
+    display: flex;
+    justify-content: flex-end; /* Coloca el contenedor a la derecha */
+    padding-left: 20px; /* Espacio entre el contenedor y el borde izquierdo */
+    flex: 1;
+}
+.containerLevels {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 16px;
+    width: 250px; /* Tamaño de ancho consistente para ambos */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    font-family: 'Work Sans', sans-serif; /* Fuente del texto */
+}
+.containerLevels h2 {
+    font-size: 30px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.containerLevels ul {
+    list-style-type: none; /* Sin viñetas */
+    padding: 0;
+}
+.containerLevels li {
+    font-size: 20px;
+    color: #555;
+    margin: 6px 0;
+    padding-left: 10px;
+    position: relative;
+}
+.containerLevels li::before {
+    content: "•"; /* Añade un punto como ícono */
+    color: #009688; /* Color del ícono */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}

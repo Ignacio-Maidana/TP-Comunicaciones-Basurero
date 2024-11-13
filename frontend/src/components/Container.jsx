@@ -21,7 +21,7 @@ const Container = ({ placa }) => {
   // Obtener el registro más reciente (debería ser el único en el array después de los cambios)
   const ultimoRegistro = placa.registros && placa.registros.length > 0 ? placa.registros[0] : null;
   const porcentajeLlenado = ultimoRegistro ? ultimoRegistro.porcentaje : 0;
-
+  
   return (
     <div className="containerCard">
       <h3>Contenedor N° {placa.id}</h3>
